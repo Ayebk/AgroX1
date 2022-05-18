@@ -52,30 +52,23 @@ const Home = () => {
     const [indexPage, setIndexPage] = useState(0);
     const [indexCrop, setIndexCrop] = useState(1);
     const [dataFinised, setDataFinised] = useState(false);
+    const [crops, setCrops] = useState(['פירות', 'ירקות', 'עלים'])
 
 
     /**
      * Reference for scrolling to top again
      */
 
-    const titleRefFruits = useRef();
-    const titleRefVegetables = useRef();
-    const titleRefLeaves = useRef();
+    const titleRef = useRef();
 
-    function handleClickFruits() {
-        titleRefFruits.current.scrollIntoView({ behavior: "smooth" });
-    }
-    function handleClickVegetables() {
-        titleRefVegetables.current.scrollIntoView({ behavior: "smooth" });
-    }
-    function handleClickLeaves() {
-        titleRefLeaves.current.scrollIntoView({ behavior: "smooth" });
+    function handleClickScroll(cropTitle) {
+        titleRef.current.scrollIntoView();
     }
 
 
-     /**
-     * Button for next and previous
-     */
+    /**
+    * Button for next and previous
+    */
 
     const handleClick = (direction) => {
         if (direction === "next" && !dataFinised) {
@@ -83,9 +76,7 @@ const Home = () => {
         } else if (direction === "prev" && indexPage > 0) {
             setIndexPage(indexPage => indexPage - 1)
         }
-
     };
-
 
     /**
      * Request for Products content - API
@@ -111,40 +102,21 @@ const Home = () => {
 
     return (
         <Container>
-            <Topbar setIndexCrop={setIndexCrop} />
+            <Topbar setIndexCrop={setIndexCrop} setIndexPage={setIndexPage} />
             <ListProductWrapper>
-                <TabContentWrapper>
-                    <TabContent hidden={indexCrop !== 1}>
-                        <TabTitle ref={titleRefFruits} >פירות</TabTitle>
-                        {data ? data.map((item, index) => (
-                            <Product item={item} key={index} />
-                        )) : null}
-                        <PageWrapper>
-                            <Page onClick={() => { handleClick("prev"); handleClickFruits(); }}>חזור</Page>
-                            <Page onClick={() => { handleClick("next"); handleClickFruits(); }}>הבא</Page>
-                        </PageWrapper>
-                    </TabContent >
-                    <TabContent hidden={indexCrop !== 2}>
-                        <TabTitle ref={titleRefVegetables}> ירקות</TabTitle>
-
-                        {data ? data.map((item, index) => (
-                            <Product item={item} key={index} />
-                        )) : null}
-                        <PageWrapper>
-                            <Page onClick={() => { handleClick("prev"); handleClickVegetables(); }}>חזור</Page>
-                            <Page onClick={() => { handleClick("next"); handleClickVegetables(); }}>הבא</Page>
-                        </PageWrapper>
-                    </TabContent >
-                    <TabContent hidden={indexCrop !== 3}>
-                        <TabTitle ref={titleRefLeaves}>עלים</TabTitle>
-                        {data ? data.map((item, index) => (
-                            <Product item={item} key={index} />
-                        )) : null}
-                        <PageWrapper>
-                            <Page onClick={() => { handleClick("prev"); handleClickLeaves(); }}>חזור</Page>
-                            <Page onClick={() => { handleClick("next"); handleClickLeaves(); }}>הבא</Page>
-                        </PageWrapper>
-                    </TabContent>
+                <TabContentWrapper  ref={titleRef}>
+                    {crops.map((crop,index) => (
+                        <TabContent key={index} hidden={indexCrop !== index+1}>
+                            <TabTitle >{crop}</TabTitle>
+                            {data ? data.map((item, index) => (
+                                <Product item={item} key={index} />
+                            )) : null}
+                            <PageWrapper>
+                                <Page onClick={() => { handleClick("prev"); handleClickScroll(crop); }}>חזור</Page>
+                                <Page onClick={() => { handleClick("next"); handleClickScroll(crop); }}>הבא</Page>
+                            </PageWrapper>
+                        </TabContent >
+                    ))}
                 </TabContentWrapper>
             </ListProductWrapper>
         </Container>

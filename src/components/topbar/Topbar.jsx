@@ -38,13 +38,14 @@ const Tab = styled.button`
 }
 `
 
-const topbar = ({setIndexCrop}) => {
+const topbar = ({setIndexCrop , setIndexPage}) => {
+
     return (
         <Container>
             <TabWrapper>
-                <Tab onClick={() => { setIndexCrop(1) }}>פירות</Tab>
-                <Tab onClick={() => { setIndexCrop(2) }}>ירקות</Tab>
-                <Tab onClick={() => { setIndexCrop(3) }}>עלים</Tab>
+                <Tab onClick={() => { setIndexCrop(1);setIndexPage(0) }}>פירות</Tab>
+                <Tab onClick={() => { setIndexCrop(2);setIndexPage(0) }}>ירקות</Tab>
+                <Tab onClick={() => { setIndexCrop(3);setIndexPage(0) }}>עלים</Tab>
             </TabWrapper> 
         </Container>
     )
